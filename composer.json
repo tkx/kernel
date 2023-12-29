@@ -1,0 +1,33 @@
+{
+    "name": "moteam/kernel",
+    "description": "PHP methods container for RPC",
+    "type": "library",
+    "keywords": [
+        "rpc",
+        "methods",
+        "container"
+    ],
+    "authors": [
+        {
+            "name": "tkxyz",
+            "email": "tk.moteam@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Moteam\\Kernel\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9.6.x-dev",
+        "phpstan/phpstan": "^1.10"
+    },
+    "scripts": {
+        "test": "phpunit -v tests",
+        "stan": "phpstan analyze src",
+        "stan-l1": "phpstan analyze src --level 1"
+    }
+}
