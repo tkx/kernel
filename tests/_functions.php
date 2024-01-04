@@ -1,14 +1,15 @@
 <?php
-namespace X;
+namespace Moteam\Kernel\Tests;
 
 use Moteam\Kernel\Config;
-use X\TestPackage\TestPackage;
-use X\Services\TestService;
+use Moteam\Kernel\Kernel;
+use Moteam\Kernel\Tests\TestPackage\TestPackage;
+use Moteam\Kernel\Tests\Services\TestService;
 
 function getConfig(): Config {
     return (new Config())
         ->setBuildPath(__DIR__ . "/build")
-        ->setBuildNamespace("X\\build")
+        ->setBuildNamespace("Moteam\\Kernel\\Tests\\build")
         ->setDefinitions([
             "int" => function(string $name, array $params): int { return (int) $params[$name]; },
             "string" => function(string $name, array $params): string { return (string) $params[$name]; },
@@ -16,4 +17,8 @@ function getConfig(): Config {
         ])->setPackages([
             TestPackage::class,
         ]);
+}
+
+function getKernel(Config $config): Kernel {
+    return new Kernel($config);
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace X\Services;
+namespace Moteam\Kernel\Tests\Services;
 
 class TestService {
     public function test(int $value): int {

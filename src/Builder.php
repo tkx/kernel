@@ -5,6 +5,9 @@ use Moteam\Kernel\Contracts\ConfigInterface;
 use Moteam\Kernel\Contracts\BuilderInterface;
 
 class Builder implements BuilderInterface {
+    /**
+     * Short method to build kernel.
+     */
     public static function b(ConfigInterface $config) {
         (new static())->build($config);
     }
@@ -15,6 +18,10 @@ class Builder implements BuilderInterface {
     public function build(ConfigInterface $config): self {
         $bns = $config->getBuildNamespace();
 
+        if(!\file_exists($config->getBuildPath())) {
+            @\mkdir($config->getBuildPath());
+        }
+
         foreach($config->getMethods() as $name => $klass) {
             /**
              * @var string $klassName
@@ -22,8 +29,17 @@ class Builder implements BuilderInterface {
              */
             $klassName = \basename(\str_replace('\\', '/', $klass));
 
+            /** @var \ReflectionMethod $method */
+            $method = (new \ReflectionClass($klass))->getMethod("__invoke");
+
             /** @var array<\ReflectionParameter> $params */
-            $params = (new \ReflectionClass($klass))->getMethod("__invoke")->getParameters();
+            $params = $method->getParameters();
+
+            /** @var \ReflectionNamedType $return */
+            $return = $method->getReturnType();
+            $return_type = $return ? (
+                ": " . ($return->isBuiltin() ? "" : "\\") . $return->getName()
+            ) : "";
             
             /** @var string $paramParts */
             $paramParts = \implode("\n", 
@@ -50,7 +66,7 @@ use Moteam\Kernel\MethodInvoker;
 use {$klass};
 
 class {$klassName}Invoker extends MethodInvoker {
-	public function __invoke(KernelInterface \$kernel, array \$params) {
+	public function __invoke(KernelInterface \$kernel, array \$params){$return_type} {
 		return (new {$klassName}(\$kernel))(
 {$paramParts}
 		);

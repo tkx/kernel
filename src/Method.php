@@ -21,4 +21,8 @@ abstract class Method implements MethodInterface {
     public function getKernel(): KernelInterface {
         return $this->kernel;
     }
+
+    public function response() {
+        
+    }
 }
